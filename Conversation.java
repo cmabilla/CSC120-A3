@@ -27,26 +27,28 @@ public class Conversation implements ConversationRequirements {
     this.responses = responses;
     this.default_responses = default_responses;
     this.possible_pronouns = possible_pronouns;
-    transcript = new ArrayList <String>();//honestly, I only did this because I couldnt...
+    this.transcript = new ArrayList <String>();//honestly, I only did this because I couldnt...
     //..find a way to add strings to the other list type I used above. This didn't work though.
+    //you have to add this before transcript 
   }
 
   /**
    * Starts and runs the conversation with the user
    */
   public void chat() {
-    Scanner input = new Scanner (System.in);//Not sure why its yellow
+    Scanner input = new Scanner (System.in);//Not sure why its yellow... nevermind
     System.out.println ("How many rounds?");
-    transcript.add("How many rounds?");
+    this.transcript.add("How many rounds?");
+    //chat is inside the class definition for conversation hence you need 'this'
     int amount = input.nextInt();
     input.nextLine();
-    transcript.add(amount+"");
+    this.transcript.add(amount+"");
     System.out.println ("Hi! What's on your mind?");
-    transcript.add("Hi! What's on your mind?");
+    this.transcript.add("Hi! What's on your mind?");
     //input.close();
-    for (int i = 0; i <= amount ; i++){//It never does the exact amount of rows
+    for (int i = 0; i < amount ; i++){//be careful with the values in here
       String user_response = input.nextLine();
-      transcript.add(user_response);
+      this.transcript.add(user_response);
       user_response = user_response.toLowerCase();//.equalsIgnoreCase works too
       String [] responses = user_response.split(" ");//what happens if its not split by spaces?
       //System.out.println(Arrays.toString(responses));
@@ -60,41 +62,35 @@ public class Conversation implements ConversationRequirements {
             break;//This prevents a repetition or replacing already swapped words
           }
         }
+        
       }
+      //if (responses.length... WOULDNOT WORK
       String new_responses = String.join(" ",responses);
-      if (new_responses.equalsIgnoreCase(user_response)){
+      
+      if (new_responses.equalsIgnoreCase(user_response)){ //if you don't ignore case it wouldn't work
         Random random = new Random();
         
         String newVariable = (default_responses[random.nextInt(default_responses.length)]);
-        transcript.add(newVariable);//Doesn't work
-
+        System.out.println(newVariable);
+        this.transcript.add(newVariable);
       }else{
         System.out.println(new_responses);
-        transcript.add(new_responses);//this should ideally work but it doesn't
+        this.transcript.add(new_responses);
       }
     }
 }
-  //THIS WAS AN INITIAL ATTEMPT AT READING MY USER RESPONSE FOR MIRROR WORD
-  //     for (String word:responses){
-  //       for (String key : possible_pronouns){
-  //         if (word.equalsIgnoreCase(key)){
-  //           respond(word);
-  //         } else {
-
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-
+  
   /**
    * Prints transcript of conversation
    */
   public void printTranscript() {
-    for (String i : transcript){
-      System.out.println(i);//This entire method is not working 
-      //I did an ArrayList instead of whatever I was doing before 
+    System.out.println("____________________________");
+    System.out.println("Conversation Transcript...");
+    System.out.println(" ");
+    for (String i : this.transcript){
+      System.out.println(i);
     }
+    System.out.println("_____________________________");
   }
 
   /**
@@ -114,9 +110,10 @@ public class Conversation implements ConversationRequirements {
       return "your";
     } else if (inputString.equals("your")){
       return "my";
+    } else {
+      return "";//This method is expecting an if, elif then ELSE so we put this here as a backup
     }
-    String returnString = ""; 
-    return returnString; 
+   
   }
 
   public static void main(String[] arguments) {
@@ -124,7 +121,7 @@ public class Conversation implements ConversationRequirements {
     Conversation myConversation = new Conversation();
     myConversation.chat();
     myConversation.printTranscript();
-    //my printTranscript does not work and I am not sure why
+    
 
   }
 }
